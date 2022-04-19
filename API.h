@@ -39,13 +39,14 @@ String APITOKEN;
 const char* PASSWD;
 const char* USER;
 
-const int RolePin = 12;
+const int RolePin = 5;
 
 #define DHTPIN 2             // Sensörümüzün sinyal bacağının bağlı olduğu pini belirliyoruz.
 #define DHTTYPE DHT11        // DHT 11 kullanacağımız için tipimizi belirliyoruz.
 
 DHT Dht(DHTPIN, DHTTYPE);
 
+namespace ZeroHouse{
 void Connect(String URL, String VERIFYTOKEN, const char* WPASSWD, const char* WUSER) {
   APIURL = URL;
   VERIFYTOKEN = APITOKEN;
@@ -56,7 +57,7 @@ void Connect(String URL, String VERIFYTOKEN, const char* WPASSWD, const char* WU
 
   Serial.begin(115200);
 
-  WiFi.begin("*****", "*****");
+  WiFi.begin("Blackjack TeraNET", "11141631");
   Serial.print("Connecting to");
   //Serial.println(WPASSWD);
   //Serial.println(WUSER);
@@ -67,13 +68,13 @@ void Connect(String URL, String VERIFYTOKEN, const char* WPASSWD, const char* WU
   Serial.println("Connected");
 
   pinMode(RolePin, OUTPUT);
-  digitalWrite(RolePin,LOW);
+  //digitalWrite(RolePin,LOW);
  
   Dht.begin();
 }
 
 void SendTemperatureAndHumidity() {
-  Serial.begin(115200);
+ /* Serial.begin(115200);
   while (WiFi.status() == WL_CONNECTED) {
     String nem = String(Dht.readHumidity());
     String sicaklik = String(Dht.readTemperature());
@@ -85,7 +86,7 @@ void SendTemperatureAndHumidity() {
     String emptySicaklik = "";
     String emptyNem = "";
 
-    istek.begin(client, APIURL + "control.php?token=" + "tg3f-l2s6-mn3-qmv-3g-ms" + "&tur=sicaklik&veri=" + sicaklik);
+    istek.begin(client, APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=sicaklik&veri=" + sicaklik);
     int sicaklikCode = istek.GET();
 
     if (sicaklikCode > 0) {
@@ -96,7 +97,7 @@ void SendTemperatureAndHumidity() {
 
         istek.end();
         
-        istek.begin(client, APIURL + "control.php?token=" + "tg3f-l2s6-mn3-qmv-3g-ms" + "&tur=nem&veri=" + nem);
+        istek.begin(client, APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=nem&veri=" + nem);
 
         int nemCode = istek.GET();
 
@@ -109,7 +110,7 @@ void SendTemperatureAndHumidity() {
           Serial.print("Bir hata meydana geldi | ");
         Serial.print(istek.getString());
         Serial.println("Requested URL: ");
-        Serial.print( APIURL + "control.php?token=" + "tg3f-l2s6-mn3-qmv-3g-ms" + "&tur=nem&veri=" + nem + "\n");
+        Serial.print( APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=nem&veri=" + nem + "\n");
         Serial.print("Real nem: ");
         Serial.println(nem);
           }
@@ -117,7 +118,7 @@ void SendTemperatureAndHumidity() {
         Serial.print("Bir hata meydana geldi | ");
         Serial.print(istek.getString());
         Serial.println("Requested URL: ");
-        Serial.print( APIURL + "control.php?token=" + "tg3f-l2s6-mn3-qmv-3g-ms" + "&tur=sicaklik&veri=" + sicaklik + "\n");
+        Serial.print( APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=sicaklik&veri=" + sicaklik + "\n");
         Serial.print("Real sicaklik: ");
         Serial.println(sicaklik);
         
@@ -129,11 +130,12 @@ void SendTemperatureAndHumidity() {
   }
   Serial.println("Baglantı koptu!");
   return;
+  */
 }
 
 void Begin() {
   while (WiFi.status() == WL_CONNECTED) {
-    istek.begin(client, APIURL + "auth.php"); //Httpclientini api için tanımladık
+    istek.begin(client, APIURL + "misc"); //Httpclientini api için tanımladık
     int httpCode = istek.GET();  //Bir istek gönderiyoruz
 
     if (httpCode > 0) { //Geri dönen http kodunun doğruluğunu kontrol ediyoruz
@@ -162,12 +164,12 @@ void Begin() {
       String gelendurum = jsonDocument["role"].as<String>();
 
       if(gelendurum == "acik"){
-        Serial.println("Roleye HIGH bilgisi gönderildi");
-        digitalWrite(RolePin,HIGH);
+        Serial.println("Roleye LOW bilgisi gönderildi");
+        digitalWrite(RolePin,LOW);
         }
         else if(gelendurum == "kapali"){
           Serial.println("Roleye LOW bilgisi gönderildi");
-          digitalWrite(RolePin,LOW);
+         digitalWrite(RolePin,HIGH);
           }
 
           
@@ -175,10 +177,60 @@ void Begin() {
 
     istek.end();
     
-   
+   String nem = String(Dht.readHumidity());
+    String sicaklik = String(Dht.readTemperature());
+
+    if (nem == "nan" || sicaklik == "nan") {
+      Serial.println("DHT sensorunun olcumunde hata oldu!");
+      return;
+    }
+    String emptySicaklik = "";
+    String emptyNem = "";
+
+    istek.begin(client, APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=sicaklik&veri=" + sicaklik);
+    int sicaklikCode = istek.GET();
+
+    if (sicaklikCode > 0) {
+      if (istek.getString() != "0") {
+        Serial.print("Sicaklik degeri basariyle gonderildi | ");
+        Serial.println(sicaklik);
+        delay(500);
+
+        istek.end();
+        
+        istek.begin(client, APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=nem&veri=" + nem);
+
+        int nemCode = istek.GET();
+
+        if(nemCode >0){
+        Serial.print("Nem degeri basariyle gonderildi | ");
+        Serial.println(nem);
+
+        istek.end();
+        }else{
+          Serial.print("Bir hata meydana geldi | ");
+        Serial.print(istek.getString());
+        Serial.println("Requested URL: ");
+        Serial.print( APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=nem&veri=" + nem + "\n");
+        Serial.print("Real nem: ");
+        Serial.println(nem);
+          }
+      }else if(istek.getString() == "0"){
+        Serial.print("Bir hata meydana geldi | ");
+        Serial.print(istek.getString());
+        Serial.println("Requested URL: ");
+        Serial.print( APIURL + "api?anahtar=" + "e09836e1adf09a174cf1a9fdb07156aa" + "&tur=sicaklik&veri=" + sicaklik + "\n");
+        Serial.print("Real sicaklik: ");
+        Serial.println(sicaklik);
+        
+      }
+    }
+
+    istek.end();
     
     delay(2500);
   }
   Serial.println("Baglantı koptu!");
   return;
+}
 }
