@@ -21,8 +21,8 @@ if($wafSystemActive == 1)
 
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'zerohouse');
-define('DB_PASSWORD', 'Hps45r&1');
-define('DB_NAME', 'admin_zerohouse');
+define('DB_PASSWORD', '*******');
+define('DB_NAME', '******');
  
 try{
     $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
