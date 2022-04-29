@@ -1,6 +1,6 @@
 <?php
     include 'api/config.php';
-	$server_check_version = '1.0.4';
+	$server_check_version = '0.0.2';
 	$start_time = microtime(TRUE);
 
 	$operating_system = PHP_OS_FAMILY;
@@ -101,10 +101,8 @@ while($row=$sql->fetch(PDO::FETCH_ASSOC)){
 		
 		$sonuc=$veri->execute();
 		
-		if($sonuc){
-		//echo 'basarili';
-		}else{ //echo 'basarisiz';
-		}
+		
+
 	}else if($suanki == 'kapali'){
 		$veri=$pdo->prepare("UPDATE roleler SET durum = :veri"); 
 		$veri->bindValue(':veri', $acik, PDO::PARAM_STR);
