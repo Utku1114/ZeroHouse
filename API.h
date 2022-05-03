@@ -164,7 +164,7 @@ void Begin() {
       String gelendurum = jsonDocument["role"].as<String>();
 
       if(gelendurum == "acik"){
-        Serial.println("Roleye LOW bilgisi gönderildi");
+        Serial.println("Roleye HIGH bilgisi gönderildi");
         digitalWrite(RolePin,LOW);
         }
         else if(gelendurum == "kapali"){
