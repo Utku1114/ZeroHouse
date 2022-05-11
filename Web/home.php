@@ -1,5 +1,22 @@
 <?php
     include 'api/config.php';
+
+	require('api/WAF.php');
+	$xWAF = new xWAF();
+
+	$xWAF->useCloudflare();
+
+	$xWAF->useBlazingfast();
+
+	$xWAF->customIPHeader('IP-Header');
+
+	$xWAF->antiCookieSteal('username'); 
+
+
+	$xWAF->checkGET();
+	$xWAF->checkPOST();
+        $xWAF->checkCOOKIE();
+
 	$server_check_version = '0.0.2';
 	$start_time = microtime(TRUE);
 
