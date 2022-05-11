@@ -1,6 +1,6 @@
 <?php
 // Initialize the session
-require('api/WAF.php');
+       require('api/WAF.php');
 	$xWAF = new xWAF();
 
 	$xWAF->useCloudflare();
