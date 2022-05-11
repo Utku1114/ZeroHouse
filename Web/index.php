@@ -1,5 +1,20 @@
 <?php
 // Initialize the session
+require('api/WAF.php');
+	$xWAF = new xWAF();
+
+	$xWAF->useCloudflare();
+
+	$xWAF->useBlazingfast();
+
+	$xWAF->customIPHeader('IP-Header');
+
+	$xWAF->antiCookieSteal('username'); 
+
+
+	$xWAF->checkGET();
+	$xWAF->checkPOST();
+        $xWAF->checkCOOKIE();
 session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
