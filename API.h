@@ -2,7 +2,7 @@
 
   Project ZeroHouse & Sıfırdan
 
-  Autor: @Utku
+  Author: @Utku
 
   Thanks: @TOBB
 
