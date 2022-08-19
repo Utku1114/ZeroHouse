@@ -726,7 +726,7 @@ $sorgunem->execute();while($satirnem = $sorgunem->fetch(PDO::FETCH_ASSOC)) { ?>
                                             <span class="timeline-point timeline-point-warning timeline-point-indicator"></span>
                                             <div class="timeline-event">
                                                 <h6>Bakım</h6>
-                                                <p>Sunucu taraflı azıre yüzünden web dosyaları kaybedildi</p>
+                                                <p>Sunucu taraflı azure yüzünden web dosyaları kaybedildi</p>
                                                
                                                 
                                             </div>
