@@ -57,7 +57,7 @@ void Connect(String URL, String VERIFYTOKEN, const char* WPASSWD, const char* WU
 
   Serial.begin(115200);
 
-  WiFi.begin("Blackjack TeraNET", "11141631");
+  WiFi.begin("Blackjack TeraNET", "");
   Serial.print("Connecting to");
   //Serial.println(WPASSWD);
   //Serial.println(WUSER);
@@ -128,7 +128,7 @@ void SendTemperatureAndHumidity() {
     istek.end();
     delay(2500);
   }
-  Serial.println("Baglantı koptu!");
+  Serial.println("Baglanti koptu!");
   return;
   */
 }
@@ -230,7 +230,7 @@ void Begin() {
     
     delay(2500);
   }
-  Serial.println("Baglantı koptu!");
+  Serial.println("Baglanti koptu!");
   return;
 }
 }
